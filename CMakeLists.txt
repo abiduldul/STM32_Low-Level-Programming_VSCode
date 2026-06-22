@@ -14,7 +14,7 @@ include_directories(after PUBLIC
     drivers/CMSIS_6/CMSIS/Core/Include
     drivers/cmsis-device-l4/Include
     drivers/stm32l4xx-hal-driver/Inc
-    core/inc/
+    core/include/
 )
 
 set(APP_SOURCES
@@ -41,7 +41,7 @@ set(APP_SOURCES
     drivers/cmsis-device-l4/Source/Templates/system_stm32l4xx.c
 )
 
-file(GLOB MERTANI_SOURCES "core/src/*.c")
+file(GLOB MERTANI_SOURCES "core/source/*.c")
 list(APPEND APP_SOURCES ${MERTANI_SOURCES})
 
 add_executable(firmware.elf ${APP_SOURCES}) 
