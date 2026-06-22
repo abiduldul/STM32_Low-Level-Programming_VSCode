@@ -14,14 +14,12 @@ include_directories(after PUBLIC
     drivers/CMSIS_6/CMSIS/Core/Include
     drivers/cmsis-device-l4/Include
     drivers/stm32l4xx-hal-driver/Inc
-    inc/
+    core/inc/
 )
 
 set(APP_SOURCES
     middlewares/threadx/ports/cortex_m4/gnu/example_build/tx_initialize_low_level.S
     startup.s
-    
-    main.c
 
     drivers/stm32l4xx-hal-driver/Src/stm32l4xx_hal.c 
     drivers/stm32l4xx-hal-driver/Src/stm32l4xx_hal_cortex.c
@@ -43,7 +41,7 @@ set(APP_SOURCES
     drivers/cmsis-device-l4/Source/Templates/system_stm32l4xx.c
 )
 
-file(GLOB MERTANI_SOURCES "src/*.c")
+file(GLOB MERTANI_SOURCES "core/src/*.c")
 list(APPEND APP_SOURCES ${MERTANI_SOURCES})
 
 add_executable(firmware.elf ${APP_SOURCES}) 
