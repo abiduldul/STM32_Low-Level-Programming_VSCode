@@ -1,4 +1,5 @@
 #include "system.h"
+#include "sd.h"
 
 extern UART_HandleTypeDef hlpuart1;
 extern UART_HandleTypeDef huart1;

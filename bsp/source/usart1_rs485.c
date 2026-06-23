@@ -1,4 +1,4 @@
-#include "usart1_rs485_init.h"
+#include "usart1_rs485.h"
 #include "system.h"
 
 UART_HandleTypeDef huart1;

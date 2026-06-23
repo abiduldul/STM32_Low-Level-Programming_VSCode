@@ -1,14 +1,7 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-#include <stdint.h>
-#include "stm32l4xx_hal.h"
-#include "tx_api.h"
-#include <string.h>
-#include <stdio.h>
-
-#define TX_TICK_RATE_HZ 1000 
-#define MS_TO_TICKS(ms) ((ms * TX_TICK_RATE_HZ) / 1000)
+#include "bsp.h"
 
 void gpio_init(void);
 uint32_t HAL_GetTick(void);
