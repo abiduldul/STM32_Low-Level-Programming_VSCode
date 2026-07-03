@@ -1,6 +1,10 @@
 #include "thread_sensor.h"
 #include "usart1_rs485.h"
 #include "uart1.h"
+#include "bgt_w87x.h"
+#include "bsp.h"
+
+bgt_sens sensor_data;
 
 void thread_sensor(ULONG thread_input) {
     LPUART1_Init();
@@ -17,7 +21,7 @@ void thread_sensor(ULONG thread_input) {
         tx_frame[2] = 0x00; 
         tx_frame[3] = 0x00; 
         tx_frame[4] = 0x00; 
-        tx_frame[5] = 0x01; 
+        tx_frame[5] = 0x0D; 
 
         uint16_t crc = Calculate_Modbus_CRC(tx_frame, 6);
         tx_frame[6] = (uint8_t)(crc & 0xFF);        
@@ -54,11 +58,28 @@ void thread_sensor(ULONG thread_input) {
             cursor += sprintf(&pc_message[cursor], "%02X ", modbus_rx_buffer[i]);
         }
         sprintf(&pc_message[cursor], "\r\n");
+        
+        // decode_bgt(modbus_rx_buffer, &sensor_data);
 
         // LANGKAH 10: Kirim laporan hasil pembacaan sensor ke PC monitor via LPUART1
         hlpuart1.gState = HAL_UART_STATE_READY; //
         HAL_UART_Transmit(&hlpuart1, (uint8_t *)pc_message, strlen(pc_message),200); //
+        
+        sprintf(pc_message,
+        "Temp : %d C\r\n"
+        "Hum  : %d %%\r\n"
+        "Pres : %d hPa\r\n"
+        "Wind : %d m/s\r\n"
+        "Dir  : %u deg\r\n",
+        sensor_data.temp,
+        sensor_data.humidity,
+        sensor_data.pressure,
+        sensor_data.wind_speed,
+        sensor_data.wind_direction);
 
+        HAL_UART_Transmit(&hlpuart1, (uint8_t *)pc_message, strlen(pc_message), 200);
+        
+        tx_queue_send(&bgt_sensor_data_q, &sensor_data, TX_NO_WAIT);
         // Beri jeda 2 milidetik (atau disesuaikan) sebelum melakukan polling berikutnya
         tx_thread_sleep(MS_TO_TICKS(2000)); //
     }

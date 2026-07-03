@@ -7,20 +7,32 @@
     },
     "configurePresets": [
         {
-            "name":"mertani-2.5",
-            "displayName":"Mertani Board 2.5",
-            "description":"Datalogger Mertani Board 2.5",
+            "name": "mertani-2.5",
+            "displayName": "Mertani Board 2.5",
+            "description": "Datalogger Mertani Board 2.5",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/mertani-2.5",
             "toolchainFile": "${sourceDir}/cmake/toolchain-mertani_2.5.cmake",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILED_COMMANDS": "ON"
             }
+        },
+        {
+            "name": "Configure preset using toolchain file",
+            "displayName": "Configure preset using toolchain file",
+            "description": "Sets Ninja generator, build and install directory",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+            }
         }
     ],
     "buildPresets": [
         {
-            "name":"build-mertani-2.5",
+            "name": "build-mertani-2.5",
             "displayName": "Build For Mertani Board 2.5",
             "configurePreset": "mertani-2.5"
         }

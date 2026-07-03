@@ -15,6 +15,7 @@ extern UART_HandleTypeDef huart1;
 
 extern TX_SEMAPHORE pc_rx_sem;
 extern TX_SEMAPHORE modbus_rx_sem;
+extern TX_QUEUE bgt_sensor_data_q;
 extern uint8_t pc_rx_buffer[], modbus_rx_buffer[];
 extern uint16_t pc_rx_len, modbus_rx_len;
 

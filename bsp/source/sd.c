@@ -74,3 +74,32 @@ void SDMMC1_SD_Init(void) {
     sprintf(hw_log, "✅ [DEBUG_HW] Selesai! Semua Jalur Hardware Siap.\r\n");
     HAL_UART_Transmit(&hlpuart1, (uint8_t *)hw_log, strlen(hw_log), 200);
 }
+
+// sector_num = alamat sector di SD
+// *pBuffer = alamat data RAM yang akan dikirim
+HAL_StatusTypeDef SD_write_raw_sector(uint32_t sector_num, uint8_t *pBuffer) {
+    HAL_StatusTypeDef status;
+
+    status = HAL_SD_WriteBlocks(&hsd_sdmmc1, pBuffer, sector_num, 1, 100); // 1 = jumlah block yang akan ditulis, 100 = timeout
+
+    if (status == HAL_OK) {
+        // wait until the SD card finishes its internal physical write process
+        while (HAL_SD_GetCardState(&hsd_sdmmc1) != HAL_SD_CARD_TRANSFER) {
+            tx_thread_sleep(1);
+        }
+    }
+    return status;
+}
+
+HAL_StatusTypeDef SD_read_raw_sector (uint32_t sector_num, uint8_t *pBuffer) {
+    HAL_StatusTypeDef status;
+
+    status = HAL_SD_ReadBlocks(&hsd_sdmmc1, pBuffer, sector_num, 1, 100);
+
+    if (status == HAL_OK) {
+        while (HAL_SD_GetCardState(&hsd_sdmmc1) != HAL_SD_CARD_TRANSFER) {
+            tx_thread_sleep(1);
+        }
+    }
+    return status;
+}

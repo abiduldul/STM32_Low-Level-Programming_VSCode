@@ -48,10 +48,23 @@ list(APPEND APP_SOURCES ${MERTANI_SOURCES1} ${MERTANI_SOURCES2})
 
 add_executable(firmware.elf ${APP_SOURCES}) 
 
+target_compile_options(firmware.elf PRIVATE
+    -mthumb
+    -mcpu=cortex-m4
+    -mfloat-abi=hard
+    -mfpu=fpv4-sp-d16
+)
+
 target_link_libraries(firmware.elf PRIVATE threadx)
 
 target_link_options(firmware.elf PRIVATE
     -T${CMAKE_CURRENT_SOURCE_DIR}/linker.ld
     -Wl,--gc-sections
-    --specs=nosys.specs  # THE FIX: Provides empty stubs for _sbrk and other OS calls
-    -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/firmware.map)
+    "-specs=nosys.specs"
+    -Wl,-Map=${CMAKE_CURRENT_BINARY_DIR}/firmware.map
+    -u_printf_float
+    -mthumb
+    -mcpu=cortex-m4
+    -mfloat-abi=hard
+    -mfpu=fpv4-sp-d16
+)

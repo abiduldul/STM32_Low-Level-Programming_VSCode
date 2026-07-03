@@ -1,7 +1,9 @@
 #include "bsp.h"
 
 void thread_button(ULONG thread_input) {
-    char hay[100];
+    gpio_init();
+    HAL_Delay(100);
+    // char hay[100];
     while (1)
     {
         // if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {

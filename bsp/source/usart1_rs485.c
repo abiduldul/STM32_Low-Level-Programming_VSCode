@@ -1,5 +1,4 @@
 #include "usart1_rs485.h"
-#include "system.h"
 
 UART_HandleTypeDef huart1;
 
@@ -108,6 +107,7 @@ void RS485_SendRaw(uint8_t *data, uint16_t length) {
     ////////// Reset DMA untuk siap menerima balasan //////////
     __HAL_UART_CLEAR_FLAG(&huart1, UART_CLEAR_OREF | UART_CLEAR_NEF | UART_CLEAR_FEF  | UART_CLEAR_PEF);
     __HAL_UART_CLEAR_IDLEFLAG(&huart1);              // drop any stale IDLE
+
     HAL_UART_Receive_DMA(&huart1, modbus_rx_buffer, MODBUS_RX_BUFF_SIZE);
     __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 }
@@ -138,7 +138,7 @@ void USART1_IRQHandler(void) {
         // 4. Hentikan DMA penerimaan agar data terkunci aman di RAM
         HAL_UART_DMAStop(&huart1);
 
-        // 5. Bangunkan thread1 (Modbus Thread) melalui Semaphore
+        // 5. Bangunkan thread (Modbus Thread) melalui Semaphore
         tx_semaphore_put(&modbus_rx_sem);
         
         return;
